@@ -23,7 +23,7 @@ class ApplicationForm(forms.ModelForm):
 
         help_texts = {
             'account_name': '證券帳號的名稱，3-20個字符，只能包含英文字母、數字、底線、短橫線',
-            'phone_number': '請輸入有效的台灣電話號碼',
+            'phone_number': '請輸入有效的台灣手機號碼',
             'address': '請提供完整的聯絡地址',
         }
 
@@ -34,7 +34,7 @@ class ApplicationForm(forms.ModelForm):
             }),
             'phone_number': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': '例如：0912-345-678 或 02-1234-5678'
+                'placeholder': '例如：0912-345-678'
             }),
             'address': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -70,7 +70,8 @@ class ApplicationForm(forms.ModelForm):
         return account_name
 
     def clean_phone_number(self):
-        """驗證電話號碼格式"""
+        """驗證手機號碼格式"""
+
         phone_number = self.cleaned_data['phone_number']
 
         # 移除所有空格和短橫線，方便驗證
@@ -79,11 +80,8 @@ class ApplicationForm(forms.ModelForm):
         # 台灣手機號碼格式：09XXXXXXXX
         mobile_pattern = r'^09\d{8}$'
 
-        # 台灣市話格式：XXXXXXXX (8位數) 或 XXXXXXXXX (9位數，含區號)
-        landline_pattern = r'^0[2-8]\d{7,8}$'
-
-        if not (re.match(mobile_pattern, cleaned_phone) or re.match(landline_pattern, cleaned_phone)):
-            raise ValidationError('請輸入有效的台灣電話號碼格式，例如：0912-345-678 或 02-1234-5678')
+        if not re.match(mobile_pattern, cleaned_phone):
+            raise ValidationError('請輸入有效的台灣手機號碼格式，例如：0912-345-678')
 
         return phone_number
 
