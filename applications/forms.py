@@ -74,7 +74,7 @@ class ApplicationForm(forms.ModelForm):
         phone_number = self.cleaned_data['phone_number']
 
         # 移除所有空格和短橫線，方便驗證
-        cleaned_phone = re.sub(r'[\s-()]', '', phone_number)
+        cleaned_phone = re.sub(r'[\s\-()]', '', phone_number)
 
         # 台灣手機號碼格式：09XXXXXXXX
         mobile_pattern = r'^09\d{8}$'

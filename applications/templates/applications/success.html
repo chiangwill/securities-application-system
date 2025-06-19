@@ -1,0 +1,104 @@
+{% extends 'applications/base.html' %}
+
+{% block title %}申請成功 - 證券帳號申請系統{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white text-center">
+                <h2 class="mb-0">🎉 恭喜！申請已通過</h2>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                        <i class="h1 mb-0">✓</i>
+                    </div>
+                    <h3 class="text-success">您的證券帳戶申請已成功通過！</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">申請詳情</h5>
+                                <table class="table table-borderless mb-0">
+                                    <tr>
+                                        <td><strong>申請人帳號名稱:</strong></td>
+                                        <td>{{ application.account_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>申請時間:</strong></td>
+                                        <td>{{ application.created_at|date:"Y年m月d日 H:i" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>通過時間:</strong></td>
+                                        <td>{{ application.approved_at|date:"Y年m月d日 H:i" }}</td>
+                                    </tr>
+                                    {% if application.reviewed_by %}
+                                    <tr>
+                                        <td><strong>審核人員:</strong></td>
+                                        <td>{{ application.reviewed_by.first_name|default:application.reviewed_by.username }}</td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h6>📋 後續步驟</h6>
+                        <p class="mb-0">
+                            恭喜您成功開立證券帳戶！我們的客服人員會在 1-2 個工作天內與您聯繫，
+                            協助您完成後續的帳戶設定和相關事宜。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-grid gap-2 col-md-6 mx-auto">
+                        <a href="{% url 'application_status' %}" class="btn btn-primary btn-lg">
+                            📋 查看申請狀態
+                        </a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            🏠 返回首頁
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <small class="text-muted">
+                        如有任何問題，請聯繫我們的客服專線：0800-123-456
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 簡單的慶祝效果
+    document.addEventListener('DOMContentLoaded', function() {
+        // 可以在這裡加入一些慶祝動畫
+        console.log('🎉 申請通過！');
+    });
+</script>
+{% endblock %}
+{% endblock %}
