@@ -23,7 +23,7 @@
 
 ```bash
 # 克隆專案
-git clone <your-repository-url>
+git clone git@github.com:chiangwill/securities-application-system.git
 cd securities-application-system
 
 # 使用 uv 安裝依賴
@@ -34,7 +34,6 @@ uv sync
 
 ```bash
 # 執行資料庫遷移
-uv run python manage.py makemigrations
 uv run python manage.py migrate
 ```
 
@@ -43,9 +42,6 @@ uv run python manage.py migrate
 ```bash
 # 使用自定義指令創建超級使用者（推薦）
 uv run python manage.py create_superuser
-
-# 或使用 Django 內建指令
-uv run python manage.py createsuperuser
 ```
 
 ### 4. 啟動開發伺服器
@@ -114,17 +110,6 @@ uv run coverage html
 
 HTML 報告會生成在 `htmlcov/` 目錄，可以用瀏覽器打開 `htmlcov/index.html` 查看詳細報告。
 
-## 技術架構
-
-### 後端技術
-- **Django 5.2.3**：Web 框架
-- **SQLite**：資料庫（開發環境）
-- **Django Admin**：管理後台
-
-### 開發工具
-- **uv**：Python 套件管理
-- **coverage**：測試覆蓋率工具
-
 ## 專案結構
 
 ```
@@ -143,33 +128,6 @@ securities-application-system/
 └── README.md                   # 專案說明
 ```
 
-## 資料模型
-
-### Application 模型
-- `user`: 申請人（ForeignKey 到 User）
-- `account_name`: 申請人帳號名稱（唯一）
-- `phone_number`: 手機號碼（台灣格式驗證）
-- `address`: 詳細地址
-- `status`: 申請狀態
-- `created_at`: 申請時間
-- `reviewed_by`: 審核人員
-- `rejection_reason`: 拒絕原因
-- `additional_info_required`: 補件說明
-
-## 表單驗證
-
-- **帳號名稱**：3-20字符，英文數字底線短橫線，系統唯一
-- **手機號碼**：台灣手機格式（09XXXXXXXX）
-- **地址**：10-200字符，包含基本地址元素
-
-## 故障排除
-
-### 常見問題
-
-1. **測試失敗**：確保已執行資料庫遷移
-2. **CSS 樣式異常**：檢查網路連線（使用 CDN）
-3. **權限錯誤**：確認檔案權限和虛擬環境
-
 ### 重置資料庫
 
 ```bash
@@ -186,7 +144,3 @@ uv run python manage.py create_superuser
 ## 授權
 
 此專案僅用於面試展示目的。
-
----
-
-如有任何問題，請檢查控制台輸出或 Django 錯誤頁面獲取詳細錯誤訊息。
