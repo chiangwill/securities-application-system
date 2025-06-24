@@ -173,16 +173,3 @@ def application_success(request, application_id):
     }
 
     return render(request, 'applications/success.html', context)
-
-
-# 錯誤處理頁面
-def handler404(request, exception):
-    """404錯誤處理"""
-
-    return render(request, 'applications/404.html', status=404)
-
-
-def handler500(request):
-    """500錯誤處理"""
-
-    return render(request, 'applications/500.html', status=500)
