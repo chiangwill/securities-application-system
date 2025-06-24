@@ -32,8 +32,8 @@ class HomeViewTest(ViewsTestCase):
         """測試已登入用戶訪問首頁會重定向"""
 
         self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('home'), follow=True)
-        self.assertRedirects(response, reverse('application_create'))
+        response = self.client.get(reverse('home'))
+        self.assertRedirects(response, reverse('application_status'))
 
 
 class AuthenticationViewsTest(ViewsTestCase):
@@ -64,8 +64,8 @@ class AuthenticationViewsTest(ViewsTestCase):
         """測試已登入用戶訪問註冊頁面會重定向"""
 
         self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('user_register'), follow=True)
-        self.assertRedirects(response, reverse('application_create'))
+        response = self.client.get(reverse('user_register'))
+        self.assertRedirects(response, reverse('application_status'))
 
     def test_user_login_get(self):
         """測試登入頁面 GET 請求"""
@@ -78,8 +78,8 @@ class AuthenticationViewsTest(ViewsTestCase):
         """測試有效登入 POST 請求"""
 
         data = {'username': 'testuser', 'password': 'testpass123'}
-        response = self.client.post(reverse('user_login'), data, follow=True)
-        self.assertRedirects(response, reverse('application_create'))
+        response = self.client.post(reverse('user_login'), data)
+        self.assertRedirects(response, reverse('application_status'))
 
     def test_user_login_post_invalid(self):
         """測試無效登入 POST 請求"""
@@ -142,12 +142,18 @@ class ApplicationViewsTest(ViewsTestCase):
         response = self.client.get(reverse('application_create'))
         self.assertRedirects(response, '/accounts/login/?next=/application/create/')
 
-    def test_application_status_no_application_redirects(self):
-        """測試查看狀態 - 沒有申請會重定向到創建頁面"""
+    def test_application_status_no_application_shows_welcome(self):
+        """測試查看狀態 - 沒有申請顯示歡迎頁面"""
 
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('application_status'))
-        self.assertRedirects(response, reverse('application_create'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '歡迎來到證券帳號申請系統')
+        self.assertContains(response, '立即申請證券帳戶')
+        self.assertContains(response, '填寫申請表單')
+        self.assertContains(response, '等待審核')
+        # 檢查此時 application 變數是 None
+        self.assertIsNone(response.context['application'])
 
     def test_application_status_with_application(self):
         """測試查看狀態 - 有申請正常顯示"""
@@ -159,6 +165,9 @@ class ApplicationViewsTest(ViewsTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'test_account_001')
         self.assertContains(response, '審核中')
+        # 檢查此時 application 變數不是 None
+        self.assertIsNotNone(response.context['application'])
+        self.assertEqual(response.context['application'], application)
 
     def test_application_update_get_valid_status(self):
         """測試更新申請 - 待補件狀態"""
