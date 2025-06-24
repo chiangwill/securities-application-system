@@ -111,8 +111,7 @@ def application_status(request):
     try:
         application = Application.objects.get(user=request.user)
     except Application.DoesNotExist:
-        messages.info(request, '您尚未提交申請，請先填寫申請表單。')
-        return redirect('application_create')
+        application = None
 
     context = {
         'application': application,
